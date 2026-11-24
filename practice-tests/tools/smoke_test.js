@@ -49,7 +49,7 @@ class El {
 
 const ids = [
   "home-btn", "view-home", "view-test", "view-flash",
-  "btn-test", "btn-flash", "btn-new-test", "btn-new-test-bottom", "btn-home-bottom",
+  "btn-test", "btn-master", "btn-flash", "btn-new-test", "btn-new-test-bottom", "btn-home-bottom",
   "test-score", "test-questions",
   "flash-score", "flash-meta", "stat-correct", "stat-wrong",
   "flash-q", "flash-options", "flash-expl", "btn-next",
@@ -58,6 +58,8 @@ const byId = {};
 ids.forEach((id) => (byId[id] = new El("div")));
 
 global.window = {};
+global.window.scrollToCalls = [];
+global.window.scrollTo = (opts) => global.window.scrollToCalls.push(opts);
 global.document = {
   getElementById: (id) => byId[id] || null,
   createElement: (t) => new El(t),
@@ -104,8 +106,17 @@ byId["btn-new-test"].click();
 assert(byId["test-questions"].children.length === 30 && byId["test-score"].textContent.includes("0/30"), "New test regenerates 30 questions and resets score");
 
 byId["btn-test"].click();
+global.window.scrollToCalls.length = 0;
 byId["btn-new-test-bottom"].click();
 assert(byId["test-questions"].children.length === 30 && byId["test-score"].textContent.includes("0/30"), "bottom New test button regenerates 30 questions");
+assert(
+  global.window.scrollToCalls.length > 0 && global.window.scrollToCalls.every((c) => c.top === 0),
+  "New test scrolls the page to the top"
+);
+
+byId["btn-master"].click();
+assert(byId["test-questions"].children.length === QUESTIONS.length, "master test renders all questions");
+assert(byId["test-score"].textContent.includes(`0/${QUESTIONS.length}`), "master test score starts at 0/total");
 
 byId["btn-flash"].click();
 assert(!byId["view-flash"].classList.contains("hidden"), "flash view shown");

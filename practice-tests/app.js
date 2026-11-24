@@ -11,6 +11,7 @@ const els = {
     flash: document.getElementById("view-flash"),
   },
   btnTest: document.getElementById("btn-test"),
+  btnMaster: document.getElementById("btn-master"),
   btnFlash: document.getElementById("btn-flash"),
   btnNewTest: document.getElementById("btn-new-test"),
   btnNewTestBottom: document.getElementById("btn-new-test-bottom"),
@@ -30,6 +31,7 @@ const els = {
 const state = {
   testAnswered: 0,
   testCorrect: 0,
+  testTotal: 0,
   flashCorrect: 0,
   flashTotal: 0,
   lastFlashIndex: -1,
@@ -73,7 +75,7 @@ function showView(name) {
   els.homeBtn.classList.toggle("hidden", name === "home");
 }
 
-function buildQuestionBlock(q, index, onAnswered) {
+function buildQuestionBlock(q, index, total, onAnswered) {
   const { options, answer } = shuffledOptions(q);
 
   const block = document.createElement("div");
@@ -81,7 +83,7 @@ function buildQuestionBlock(q, index, onAnswered) {
 
   const meta = document.createElement("div");
   meta.className = "q-meta";
-  meta.textContent = `Question ${index + 1}/${TEST_SIZE} · ${q.number} · ${q.section}`;
+  meta.textContent = `Question ${index + 1}/${total} · ${q.number} · ${q.section}`;
   block.appendChild(meta);
 
   const qText = document.createElement("h2");
@@ -124,14 +126,16 @@ function buildQuestionBlock(q, index, onAnswered) {
   return block;
 }
 
-function startTest() {
+function startTest(size = TEST_SIZE) {
   state.testAnswered = 0;
   state.testCorrect = 0;
+  state.testTotal = size;
   els.testQuestions.innerHTML = "";
   updateTestScore();
-  sampleQuestions(TEST_SIZE).forEach((q, i) => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  sampleQuestions(size).forEach((q, i) => {
     els.testQuestions.appendChild(
-      buildQuestionBlock(q, i, (correct) => {
+      buildQuestionBlock(q, i, size, (correct) => {
         state.testAnswered++;
         if (correct) state.testCorrect++;
         updateTestScore();
@@ -143,7 +147,7 @@ function startTest() {
 
 function updateTestScore() {
   els.testScore.textContent =
-    `Answered: ${state.testAnswered}/${TEST_SIZE} · Correct: ${state.testCorrect}`;
+    `Answered: ${state.testAnswered}/${state.testTotal} · Correct: ${state.testCorrect}`;
 }
 
 function updateFlashStats() {
@@ -207,7 +211,8 @@ function startFlash() {
   showView("flash");
 }
 
-els.btnTest.addEventListener("click", startTest);
+els.btnTest.addEventListener("click", () => startTest(TEST_SIZE));
+els.btnMaster.addEventListener("click", () => startTest(QUESTIONS.length));
 els.btnFlash.addEventListener("click", startFlash);
 els.btnNewTest.addEventListener("click", startTest);
 els.btnNewTestBottom.addEventListener("click", startTest);
