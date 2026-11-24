@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Informatics Practice Tests</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
   <header class="topbar">
@@ -19,7 +19,7 @@
       <div class="menu">
         <button id="btn-test" class="menu-card">
           <span class="menu-card-title">Test &ndash; 30 questions</span>
-          <span class="menu-card-desc">Generate a set of 20 random questions. Answers are checked instantly with an explanation.</span>
+          <span class="menu-card-desc">Generate a set of 30 random questions. Answers are checked instantly with an explanation.</span>
         </button>
         <button id="btn-master" class="menu-card">
           <span class="menu-card-title">Master test &ndash; all questions</span>
@@ -35,7 +35,7 @@
     <!-- Test view -->
     <section id="view-test" class="view hidden">
       <div class="toolbar">
-        <div class="score" id="test-score">Answered: 0/20 &middot; Correct: 0</div>
+        <div class="score" id="test-score">Answered: 0/30 &middot; Correct: 0</div>
         <button id="btn-new-test" class="btn">New test</button>
       </div>
       <div id="test-questions"></div>
@@ -60,7 +60,7 @@
     </section>
   </main>
 
-  <script src="questions.js"></script>
-  <script src="app.js"></script>
+  <script src="questions.js?v=4"></script>
+  <script src="app.js?v=4"></script>
 </body>
 </html>
