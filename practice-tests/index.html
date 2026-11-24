@@ -18,7 +18,7 @@
       <p class="subtitle">Z&aacute;klady informatiky &ndash; 176 questions</p>
       <div class="menu">
         <button id="btn-test" class="menu-card">
-          <span class="menu-card-title">Test &ndash; 20 questions</span>
+          <span class="menu-card-title">Test &ndash; 30 questions</span>
           <span class="menu-card-desc">Generate a set of 20 random questions. Answers are checked instantly with an explanation.</span>
         </button>
         <button id="btn-flash" class="menu-card">
@@ -35,6 +35,10 @@
         <button id="btn-new-test" class="btn">New test</button>
       </div>
       <div id="test-questions"></div>
+      <div class="toolbar toolbar-bottom">
+        <button id="btn-home-bottom" class="btn">Home</button>
+        <button id="btn-new-test-bottom" class="btn">New test</button>
+      </div>
     </section>
 
     <!-- Flashcard view -->
@@ -42,7 +46,7 @@
       <div class="flash-wrap">
         <div class="score" id="flash-score">Correct: 0/0</div>
         <div class="flash-card" id="flash-card">
-          <div class="q-meta" id="flash-meta"></div>
+          <div class="q-meta"><span id="flash-meta"></span><span class="stat stat-correct" id="stat-correct">&#10003; 0</span><span class="stat stat-wrong" id="stat-wrong">&#10007; 0</span></div>
           <h2 class="q-text" id="flash-q"></h2>
           <div class="options" id="flash-options"></div>
           <div class="explanation hidden" id="flash-expl"></div>

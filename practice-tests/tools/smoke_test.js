@@ -49,9 +49,10 @@ class El {
 
 const ids = [
   "home-btn", "view-home", "view-test", "view-flash",
-  "btn-test", "btn-flash", "btn-new-test",
+  "btn-test", "btn-flash", "btn-new-test", "btn-new-test-bottom", "btn-home-bottom",
   "test-score", "test-questions",
-  "flash-score", "flash-meta", "flash-q", "flash-options", "flash-expl", "btn-next",
+  "flash-score", "flash-meta", "stat-correct", "stat-wrong",
+  "flash-q", "flash-options", "flash-expl", "btn-next",
 ];
 const byId = {};
 ids.forEach((id) => (byId[id] = new El("div")));
@@ -77,8 +78,8 @@ assert(byId["view-home"].classList.contains("hidden") === false, "home view visi
 
 byId["btn-test"].click();
 assert(!byId["view-test"].classList.contains("hidden"), "test view shown after clicking Test");
-assert(byId["test-questions"].children.length === 20, "test renders exactly 20 questions");
-assert(byId["test-score"].textContent.includes("0/20"), "score starts at 0/20");
+assert(byId["test-questions"].children.length === 30, "test renders exactly 30 questions");
+assert(byId["test-score"].textContent.includes("0/30"), "score starts at 0/30");
 
 let expectedCorrect = 0;
 for (let i = 0; i < 2; i++) {
@@ -95,12 +96,16 @@ for (let i = 0; i < 2; i++) {
   assert(!expl.classList.contains("hidden") && expl.innerHTML.includes("Explanation:"), `q${i + 1}: explanation shown`);
 }
 assert(
-  byId["test-score"].textContent === `Answered: 2/20 · Correct: ${expectedCorrect}`,
+  byId["test-score"].textContent === `Answered: 2/30 · Correct: ${expectedCorrect}`,
   "score text matches answered/correct after 2 answers"
 );
 
 byId["btn-new-test"].click();
-assert(byId["test-questions"].children.length === 20 && byId["test-score"].textContent.includes("0/20"), "New test regenerates 20 questions and resets score");
+assert(byId["test-questions"].children.length === 30 && byId["test-score"].textContent.includes("0/30"), "New test regenerates 30 questions and resets score");
+
+byId["btn-test"].click();
+byId["btn-new-test-bottom"].click();
+assert(byId["test-questions"].children.length === 30 && byId["test-score"].textContent.includes("0/30"), "bottom New test button regenerates 30 questions");
 
 byId["btn-flash"].click();
 assert(!byId["view-flash"].classList.contains("hidden"), "flash view shown");
@@ -113,6 +118,11 @@ const flashWasCorrect = firstOpt.classList.contains("correct");
 assert(!byId["flash-expl"].classList.contains("hidden"), "flash explanation shown after answering");
 assert(!byId["btn-next"].classList.contains("hidden"), "Next button shown after answering");
 assert(byId["flash-score"].textContent === `Correct: ${flashWasCorrect ? 1 : 0}/1`, "flash score updated");
+assert(
+  byId["stat-correct"].textContent === `✓ ${flashWasCorrect ? 1 : 0}` &&
+    byId["stat-wrong"].textContent === `✗ ${flashWasCorrect ? 0 : 1}`,
+  "green/red stat boxes next to question show session right/wrong counts"
+);
 
 byId["btn-next"].click();
 assert(byId["flash-expl"].classList.contains("hidden"), "explanation hidden again on next card");
@@ -120,6 +130,10 @@ assert(byId["flash-options"].children.every((b) => !b.disabled), "options re-ena
 
 byId["home-btn"].click();
 assert(!byId["view-home"].classList.contains("hidden") && byId["view-flash"].classList.contains("hidden"), "home button returns to home view");
+
+byId["btn-test"].click();
+byId["btn-home-bottom"].click();
+assert(!byId["view-home"].classList.contains("hidden") && byId["view-test"].classList.contains("hidden"), "bottom Home button returns to mode selection");
 
 if (failures) { console.error(`\n${failures} failure(s)`); process.exit(1); }
 console.log("\nAll smoke tests passed.");

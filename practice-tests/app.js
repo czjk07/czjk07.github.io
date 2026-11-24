@@ -1,6 +1,6 @@
 "use strict";
 
-const TEST_SIZE = 20;
+const TEST_SIZE = 30;
 const LETTERS = ["a", "b", "c", "d", "e"];
 
 const els = {
@@ -13,10 +13,14 @@ const els = {
   btnTest: document.getElementById("btn-test"),
   btnFlash: document.getElementById("btn-flash"),
   btnNewTest: document.getElementById("btn-new-test"),
+  btnNewTestBottom: document.getElementById("btn-new-test-bottom"),
+  btnHomeBottom: document.getElementById("btn-home-bottom"),
   testScore: document.getElementById("test-score"),
   testQuestions: document.getElementById("test-questions"),
   flashScore: document.getElementById("flash-score"),
   flashMeta: document.getElementById("flash-meta"),
+  statCorrect: document.getElementById("stat-correct"),
+  statWrong: document.getElementById("stat-wrong"),
   flashQ: document.getElementById("flash-q"),
   flashOptions: document.getElementById("flash-options"),
   flashExpl: document.getElementById("flash-expl"),
@@ -142,6 +146,12 @@ function updateTestScore() {
     `Answered: ${state.testAnswered}/${TEST_SIZE} · Correct: ${state.testCorrect}`;
 }
 
+function updateFlashStats() {
+  const wrong = state.flashTotal - state.flashCorrect;
+  els.statCorrect.textContent = `✓ ${state.flashCorrect}`;
+  els.statWrong.textContent = `✗ ${wrong}`;
+}
+
 function nextFlashcard() {
   let idx;
   do {
@@ -181,6 +191,7 @@ function nextFlashcard() {
       state.flashTotal++;
       if (correct) state.flashCorrect++;
       els.flashScore.textContent = `Correct: ${state.flashCorrect}/${state.flashTotal}`;
+      updateFlashStats();
     });
     els.flashOptions.appendChild(btn);
   });
@@ -191,6 +202,7 @@ function startFlash() {
   state.flashTotal = 0;
   state.lastFlashIndex = -1;
   els.flashScore.textContent = "Correct: 0/0";
+  updateFlashStats();
   nextFlashcard();
   showView("flash");
 }
@@ -198,5 +210,7 @@ function startFlash() {
 els.btnTest.addEventListener("click", startTest);
 els.btnFlash.addEventListener("click", startFlash);
 els.btnNewTest.addEventListener("click", startTest);
+els.btnNewTestBottom.addEventListener("click", startTest);
 els.btnNext.addEventListener("click", nextFlashcard);
 els.homeBtn.addEventListener("click", () => showView("home"));
+els.btnHomeBottom.addEventListener("click", () => showView("home"));
