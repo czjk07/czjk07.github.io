@@ -127,6 +127,7 @@ function buildQuestionBlock(q, index, total, onAnswered) {
 }
 
 function startTest(size = TEST_SIZE) {
+  if (typeof size !== "number") size = TEST_SIZE;
   state.testAnswered = 0;
   state.testCorrect = 0;
   state.testTotal = size;
@@ -214,8 +215,8 @@ function startFlash() {
 els.btnTest.addEventListener("click", () => startTest(TEST_SIZE));
 els.btnMaster.addEventListener("click", () => startTest(QUESTIONS.length));
 els.btnFlash.addEventListener("click", startFlash);
-els.btnNewTest.addEventListener("click", startTest);
-els.btnNewTestBottom.addEventListener("click", startTest);
+els.btnNewTest.addEventListener("click", () => startTest());
+els.btnNewTestBottom.addEventListener("click", () => startTest());
 els.btnNext.addEventListener("click", nextFlashcard);
 els.homeBtn.addEventListener("click", () => showView("home"));
 els.btnHomeBottom.addEventListener("click", () => showView("home"));

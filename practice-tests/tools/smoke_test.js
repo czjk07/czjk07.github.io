@@ -37,7 +37,7 @@ class El {
   get innerHTML() { return this._innerHTML; }
   appendChild(c) { this.children.push(c); return c; }
   addEventListener(t, fn) { (this.listeners[t] = this.listeners[t] || []).push(fn); }
-  click() { (this.listeners.click || []).forEach((f) => f()); }
+  click() { (this.listeners.click || []).forEach((f) => f({ type: "click" })); }
   querySelectorAll(sel) {
     const cls = sel.replace(".", "");
     const out = [];
@@ -103,12 +103,12 @@ assert(
 );
 
 byId["btn-new-test"].click();
-assert(byId["test-questions"].children.length === 30 && byId["test-score"].textContent.includes("0/30"), "New test regenerates 30 questions and resets score");
+assert(byId["test-questions"].children.length === 30 && byId["test-score"].textContent.includes("0/30"), "top New test regenerates 30 questions and resets score (event arg ignored)");
 
 byId["btn-test"].click();
 global.window.scrollToCalls.length = 0;
 byId["btn-new-test-bottom"].click();
-assert(byId["test-questions"].children.length === 30 && byId["test-score"].textContent.includes("0/30"), "bottom New test button regenerates 30 questions");
+assert(byId["test-questions"].children.length === 30 && byId["test-score"].textContent.includes("0/30") && !byId["test-score"].textContent.includes("[object"), "bottom New test button regenerates 30 questions (event arg ignored)");
 assert(
   global.window.scrollToCalls.length > 0 && global.window.scrollToCalls.every((c) => c.top === 0),
   "New test scrolls the page to the top"
